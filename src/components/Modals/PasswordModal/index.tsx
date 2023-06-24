@@ -19,8 +19,8 @@ import React, { ReactNode, useCallback } from "react";
 import * as yup from "yup";
 import { useRouter } from "next/router";
 import { Formik } from 'formik';
-import { useUpdateUserPassword } from "../../hooks/useUpdateUserPassword";
-import { InputFormik } from "../Form/input";
+import { useUpdateUserPassword } from "../../../hooks/users/useUpdateUserPassword";
+import { InputFormik } from "../../Form/input";
 
 const paasswordValidationSchema = yup.object().shape({
   password: yup.string().required('Senha obrigatória').min(6, 'No minimo 6 caracteres'),

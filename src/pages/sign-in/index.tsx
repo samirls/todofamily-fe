@@ -11,13 +11,13 @@ import {
   useColorModeValue,
   useMediaQuery,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { InputFormik } from "../../components/Form/input";
 import NextLink from "next/link";
 import { Formik } from "formik";
 import { createUserValidationSchema } from "../users/create";
 import { useRouter } from "next/router";
-import { useSignIn } from "../../hooks/useSignIn";
+import { useSignIn } from "../../hooks/users/useSignIn";
 
 const initialValues = {
   name: '',
@@ -30,8 +30,7 @@ const initialValues = {
 export default function SignupCard() {
   const router = useRouter();
   const mainColor = useColorModeValue('white', 'gray.700')
-  const createUser = useSignIn(() => router.push('/users'))
-  const [showPassword, setShowPassword] = useState(false);
+  const createUser = useSignIn(() => router.push('/'))
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
   const handleCreateUser = async (values) => {

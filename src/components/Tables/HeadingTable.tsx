@@ -15,7 +15,7 @@ export default function HeadingTable({title, titleButton, contentLength, path, i
   const isMobile = useBreakpointValue({base: true, md: true, lg: false});
 
   return (
-    <Flex justifyContent={"space-between"} h={"70px"} alignItems={"center"} p={isMobile ? '5px' : '0px'}>
+    <Flex justifyContent={"space-between"} h={"60px"} alignItems={"center"} p={isMobile ? '5px' : '0px'}>
       <HStack spacing={"10px"}>
         <>
           <Text fontSize={"22px"} fontWeight={"medium"}>{title}</Text>

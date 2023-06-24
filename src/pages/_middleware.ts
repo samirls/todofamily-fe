@@ -34,7 +34,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (currLocation.pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', currLocation))
+    return NextResponse.redirect(new URL('/familys', currLocation))
   }
 
   return NextResponse.next()

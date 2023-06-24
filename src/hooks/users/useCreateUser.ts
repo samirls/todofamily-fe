@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
-import { api } from "../services/api";
-import { queryClient } from "../services/queryClient";
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
 import { useToast } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 

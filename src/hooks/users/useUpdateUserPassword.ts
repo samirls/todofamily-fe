@@ -1,41 +1,38 @@
 import { useMutation } from "react-query";
 import { useToast } from "@chakra-ui/react";
 import { AxiosError } from "axios";
-import { api } from "../services/api";
-import { queryClient } from "../services/queryClient";
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
 
-export type createUserFormData = {
-  name: string;
-  login: string
-  email: string;
+export type updatePasswordUserFormData = {
+  id: number;
   password: string;
   password_confirmation: string;
 }
 
 type ErrorType = {
   title: string;
-  details: string;
 }
 
-export function useSignIn(onSuccess?: () => {}, onError?: () => {}) {
+export function useUpdateUserPassword(onSuccess?: () => {}, onError?: () => {}) {
   const toast = useToast()
 
-  return useMutation(async (user: createUserFormData) => {
-    const response = await api.post('/v1/auth/signup', {
-      ...user
+  return useMutation(async (password: updatePasswordUserFormData) => {
+    await api.patch('v1/user', {
+      ...password
     })
 
-    return response.data.user;
+    return null;
   }, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['user'])
+      await queryClient.invalidateQueries(['users'])
       onSuccess?.()
     }, onError: (erro: AxiosError<ErrorType>) => {
       onError?.()
 
       toast({
         title: erro.response.data.title,
-        description: erro.response.data.details,
+        description: "Você não pode alterar a senha do desenvolvedor",
         status: 'error',
         duration: 9000,
         isClosable: true,

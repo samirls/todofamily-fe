@@ -19,7 +19,7 @@ import * as yup from "yup";
 import { useRouter } from "next/router";
 import React from "react";
 import { Formik } from 'formik';
-import { useCreateUser } from "../../hooks/useCreateUser";
+import { useCreateUser } from "../../hooks/users/useCreateUser";
 import { InputFormik } from "../../components/Form/input";
 import SidebarWithHeader from "../../components/SideBar";
 

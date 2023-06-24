@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React, { useState } from "react";
 import SidebarWithHeader from "../../components/SideBar";
 // import { useDeleteUser } from "../../../hooks/user/useDeleteUser";
-import { useUsers } from "../../hooks/useUsers";
+import { useUsers } from "../../hooks/users/useUsers";
 import { Pagination } from "../../components/Pagination";
 import UserTable from "../../components/Tables/users/UserTable";
 import HeadingTable from "../../components/Tables/HeadingTable";

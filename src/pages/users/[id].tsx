@@ -24,9 +24,9 @@ import { RepeatIcon } from "@chakra-ui/icons";
 import { Formik } from 'formik';
 import { InputFormik } from "../../components/Form/input";
 import SidebarWithHeader from "../../components/SideBar";
-import { useMe } from "../../hooks/useMe";
-import { useUpdateUser } from "../../hooks/useUpdateUser";
-import { ModalPassword } from "../../components/Password";
+import { useMe } from "../../hooks/users/useMe";
+import { useUpdateUser } from "../../hooks/users/useUpdateUser";
+import { ModalPassword } from "../../components/Modals/PasswordModal";
 
 
 const updateUserValidationSchema = yup.object().shape({

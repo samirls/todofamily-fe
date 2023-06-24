@@ -25,7 +25,7 @@ export const LoginForm = ({formik}: LoginFormProps) => {
           error={errors.email}
         />
         <InputFormikPassword
-          placeholder={"Password"}
+          placeholder={"PasswordModal"}
           name="password"
           type="password"
           onChange={handleChange}

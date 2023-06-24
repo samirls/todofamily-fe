@@ -21,16 +21,20 @@ import {
   VStack
 } from "@chakra-ui/react";
 import { FiChevronDown, FiMenu } from "react-icons/fi";
-import { FaClipboardCheck } from "react-icons/fa";
+import { BsFillPeopleFill } from "react-icons/bs";
 import { MdHome } from "react-icons/md";
-import { HiCollection } from "react-icons/hi";
+import { IoIosPeople } from "react-icons/io";
+import { RiTodoLine } from "react-icons/ri";
 import React, { ReactNode } from "react";
 import NextLink from "next/link";
 import { IconType } from "react-icons";
-import { useMe } from "../../hooks/useMe";
+import { useMe } from "../../hooks/users/useMe";
 
-export default function SidebarWithHeader({children, containerSize = "7xl"}: { children?: ReactNode; containerSize?: string }) {
-  const isMobile = useBreakpointValue({ base: true, md: false });
+export default function SidebarWithHeader({
+  children,
+  containerSize = "7xl"
+}: { children?: ReactNode; containerSize?: string }) {
+  const isMobile = useBreakpointValue({base: true, md: false});
   const sidebar = useDisclosure();
   const {data: me} = useMe()
 
@@ -47,7 +51,7 @@ export default function SidebarWithHeader({children, containerSize = "7xl"}: { c
         <Flex
           as="header"
           align="center"
-          justify="flex-end"
+          justify={isMobile ? "space-between" : "flex-end"}
           w="full"
           px="4"
           bg="white"
@@ -75,12 +79,12 @@ export default function SidebarWithHeader({children, containerSize = "7xl"}: { c
               _focus={{boxShadow: 'none'}}>
               <HStack>
                 <Avatar
-                  size={{ base: 'sm', md: 'sm', lg: 'sm' }}
+                  size={{base: 'sm', md: 'sm', lg: 'sm'}}
                   borderColor={"gray.400"}
                   showBorder={true}
                 />
                 <VStack
-                  display={{base: 'none', md: 'flex'}}
+                  display={{base: 'flex', md: 'flex'}}
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2">
@@ -103,9 +107,16 @@ export default function SidebarWithHeader({children, containerSize = "7xl"}: { c
             </MenuList>
           </Menu>
         </Flex>
-          <Container p={isMobile ? '5px' : '15px'} maxW={containerSize}>
-            {children}
-          </Container>
+        <Container
+          pt={isMobile ? '5px' : '5px'}
+          pb={isMobile ? '5px' : '5px'}
+          pl={isMobile ? '5px' : '15px'}
+          pr={isMobile ? '5px' : '15px'}
+          maxW={containerSize}
+
+        >
+          {children}
+        </Container>
       </Box>
     </Box>
   )
@@ -190,7 +201,7 @@ const SidebarContent = (props) => {
       w="60"
       {...props}
     >
-      <Flex justify={"center"} py="5" >
+      <Flex justify={"center"} py="5">
         {/*<Logo />*/}
         <NextLink href="/" passHref>
           <Link sx={{'&:hover': {textDecoration: 'none'}}}>
@@ -214,54 +225,9 @@ const SidebarContent = (props) => {
         aria-label="Main Navigation"
         p={2}
       >
-        <NavItem icon={MdHome} href={"/dashboard"}>Principal</NavItem>
-        <NavItem icon={HiCollection} href={"/dashboard/products"} >
-          <>
-            Produtos
-            {/*<Icon*/}
-            {/*  as={MdKeyboardArrowRight}*/}
-            {/*  ml="auto"*/}
-            {/*  transform={products.isOpen && "rotate(90deg)"}*/}
-            {/*/>*/}
-          </>
-        </NavItem>
-        {/*<Collapse in={products.isOpen}>*/}
-        {/*  <NavItem href={"/dashboard/users"} pl="12" py="2">*/}
-        {/*    Shopify*/}
-        {/*  </NavItem>*/}
-        {/*  <NavItem href={"/dashboard/users"} pl="12" py="2">*/}
-        {/*    Slack*/}
-        {/*  </NavItem>*/}
-        {/*  <NavItem href={"/dashboard/users"} pl="12" py="2">*/}
-        {/*    Zapier*/}
-        {/*  </NavItem>*/}
-        {/*</Collapse>*/}
-
-
-        <NavItem icon={FaClipboardCheck} href={"/users"}>Usuários</NavItem>
-        {/*<NavItem icon={HiCode} href={"#"} onClick={integrations.onToggle}>*/}
-        {/*  <>*/}
-        {/*    Integrations*/}
-        {/*    <Icon*/}
-        {/*      as={MdKeyboardArrowRight}*/}
-        {/*      ml="auto"*/}
-        {/*      transform={integrations.isOpen && "rotate(90deg)"}*/}
-        {/*    />*/}
-        {/*  </>*/}
-        {/*</NavItem>*/}
-        {/*<Collapse in={integrations.isOpen}>*/}
-        {/*  <NavItem href={"/dashboard/users"} pl="12" py="2">*/}
-        {/*    Shopify*/}
-        {/*  </NavItem>*/}
-        {/*  <NavItem href={"/dashboard/users"} pl="12" py="2">*/}
-        {/*    Slack*/}
-        {/*  </NavItem>*/}
-        {/*  <NavItem href={"/dashboard/users"} pl="12" py="2">*/}
-        {/*    Zapier*/}
-        {/*  </NavItem>*/}
-        {/*</Collapse>*/}
-        {/*<NavItem href={"/dashboard/users"} icon={AiFillGift}>Gift Card</NavItem>*/}
-        {/*<NavItem href={"/dashboard/users"} icon={BsGearFill}>Configurações</NavItem>*/}
+        <NavItem icon={IoIosPeople} href={"/familys"}>Famílias</NavItem>
+        <NavItem icon={RiTodoLine} href={"/todos"}>Tarefas</NavItem>
+        <NavItem icon={BsFillPeopleFill} href={"/users"}>Usuários</NavItem>
       </Flex>
     </Box>
   )
