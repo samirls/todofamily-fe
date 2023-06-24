@@ -1,8 +1,8 @@
 import { useMutation } from "react-query";
-import { api } from "../services/api";
-import { queryClient } from "../services/queryClient";
 import { useToast } from "@chakra-ui/react";
 import { AxiosError } from "axios";
+import { api } from "../services/api";
+import { queryClient } from "../services/queryClient";
 
 export type createUserFormData = {
   name: string;
@@ -10,8 +10,6 @@ export type createUserFormData = {
   email: string;
   password: string;
   password_confirmation: string;
-  admin: boolean;
-  active: boolean;
 }
 
 type ErrorType = {
@@ -19,10 +17,11 @@ type ErrorType = {
   details: string;
 }
 
-export function useCreateUser(onSuccess?: () => {}, onError?: () => {}) {
+export function useSignIn(onSuccess?: () => {}, onError?: () => {}) {
   const toast = useToast()
+
   return useMutation(async (user: createUserFormData) => {
-    const response = await api.post('v1/user', {
+    const response = await api.post('/v1/auth/signup', {
       ...user
     })
 
@@ -38,7 +37,7 @@ export function useCreateUser(onSuccess?: () => {}, onError?: () => {}) {
         title: erro.response.data.title,
         description: erro.response.data.details,
         status: 'error',
-        duration: 3000,
+        duration: 9000,
         isClosable: true,
       })
     }

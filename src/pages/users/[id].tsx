@@ -1,12 +1,14 @@
 import {
   Box,
   Button,
-  Divider,
+  Checkbox,
   Flex,
-  Heading,
   HStack,
+  Icon,
   LightMode,
   SimpleGrid,
+  Spinner,
+  Text,
   Tooltip,
   useColorModeValue,
   VStack
@@ -18,14 +20,19 @@ import { useQuery } from "react-query";
 import { api } from "../../services/api";
 import { useRouter } from "next/router";
 import React from "react";
-
+import { RepeatIcon } from "@chakra-ui/icons";
 import { Formik } from 'formik';
 import { InputFormik } from "../../components/Form/input";
+import SidebarWithHeader from "../../components/SideBar";
+import { useMe } from "../../hooks/useMe";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
+import { ModalPassword } from "../../components/Password";
 
 
 const updateUserValidationSchema = yup.object().shape({
   name: yup.string().required('Nome obrigatório'),
+  login: yup.string().required('Login unico obrigatório'),
+  email: yup.string().required('Email obrigatório').email('Email invalido')
 })
 
 type RouteParams = {
@@ -35,17 +42,18 @@ type RouteParams = {
 export default function EditUser() {
   const mainColor = useColorModeValue('white', 'gray.800');
   const router = useRouter()
-  const { id } = router.query as RouteParams;
+  const {id} = router.query as RouteParams;
+  const {data: me} = useMe();
 
-  const { data, isLoading } = useQuery(['user', id], async () => {
-    const res = await api.get('api/people/' + id);
+  const {data: user, isLoading} = useQuery(['user', id], async () => {
+    const res = await api.get('v1/user/' + id);
     return res.data;
-  })
+  });
 
-  const updateUser = useUpdateUser(() => router.push('/users'))
+  const updateUser = useUpdateUser(() => router.push('/users'));
 
   const handleUpdateUser = async (values) => {
-    await updateUser.mutateAsync(values)
+    await updateUser.mutateAsync(values);
   }
 
   if (isLoading) {
@@ -53,75 +61,127 @@ export default function EditUser() {
   }
 
   return (
-    <Box>
-      <Flex w="100%" maxWidth={"auto"} mx={"auto"}>
-        <Box flex={1} borderRadius={8} bg={mainColor} p={8}>
-          <Formik initialValues={data}
-                  validateOnChange={false}
-                  validationSchema={updateUserValidationSchema}
-                  onSubmit={handleUpdateUser}
+    <SidebarWithHeader containerSize={"full"}>
+      <Flex justifyContent={"space-between"} h={"70px"} alignItems={"center"}>
+        <HStack spacing={"10px"}>
+          <>
+            <Text fontSize={"22px"} fontWeight={"medium"}>Editar Usuários</Text>
+            {isLoading ? (
+              <Spinner size={"sm"} />
+            ) : null}
+          </>
+        </HStack>
+        <HStack>
+          <>
+            <ModalPassword
+              id={Number(id)}
+              mainColor={mainColor}
+              trigger={(onOpen) =>
+                <LightMode>
+                  <Button as={"a"}
+                          size={"sm"}
+                          fontSize={"sm"}
+                          fontWeight={"medium"}
+                          bg={"black"}
+                          color={"white"}
+                          leftIcon={<Icon as={RepeatIcon} fontSize={"18"} />}
+                          onClick={onOpen}
+                  >
+                    Alterar Senha
+                  </Button>
+                </LightMode>}
+            />
+          </>
+        </HStack>
+      </Flex>
+
+
+      <Box>
+        <Flex w="100%" maxWidth={"auto"} mx={"auto"}>
+          <Box flex={1}
+               p={5}
+               bg={"white"}
+               borderRadius={5}
+               borderLeft={"1px"}
+               borderBottom={"1px"}
+               borderRight={"1px"}
+               borderColor={"gray.100"}
+               boxShadow="0px 0px 4px rgba(0, 0, 0, 0.1)"
           >
-            {({handleSubmit, isSubmitting, handleChange, values, errors}) =>
-              <>
-                <form onSubmit={handleSubmit}>
-                  <Flex mb={8} justify={"space-between"} align={"center"}>
-                    <Heading size={"lg"} fontWeight={"bold"}>Editar Usuário</Heading>
-
-                  </Flex>
-
-                  <Divider my={6} borderColor={"gray.700"} />
-
-                  <VStack spacing={8}>
-                    <SimpleGrid minChildWidth={"240px"} spacing={8} w={"100%"}>
-                      <InputFormik label={"Nome Completo"}
-                                   name={"name"}
-                                   important={"*"}
-                                   type={"text"}
-                                   onChange={handleChange}
-                                   value={values.name}
-                                   error={errors.name}
-                      />
-
-                      <Tooltip hasArrow label='CPF do Usuário.' shouldWrapChildren mt='3'>
-                        <InputFormik label={"CPF"}
-                                     name={"cpf"}
+            <Formik initialValues={user}
+                    validateOnChange={false}
+                    validationSchema={updateUserValidationSchema}
+                    onSubmit={handleUpdateUser}
+            >
+              {({handleSubmit, isSubmitting, handleChange, values, errors}) =>
+                <>
+                  <form onSubmit={handleSubmit}>
+                    <VStack spacing={8}>
+                      <SimpleGrid minChildWidth={"240px"} spacing={8} w={"100%"}>
+                        <InputFormik label={"Nome Completo"}
+                                     name={"name"}
                                      important={"*"}
                                      type={"text"}
                                      onChange={handleChange}
-                                     value={values.cpf}
-                                     error={errors.cpf}
+                                     value={values.name}
+                                     error={errors.name}
                         />
-                      </Tooltip>
-                      <InputFormik label={"Idade"}
-                                   name={"age"}
-                                   important={"*"}
-                                   type={"text"}
-                                   onChange={handleChange}
-                                   value={values.age}
-                                   error={errors.age}
-                      />
-                    </SimpleGrid>
-                  </VStack>
+                        <InputFormik label={"Email"}
+                                     name={"email"}
+                                     important={"*"}
+                                     type={"text"}
+                                     onChange={handleChange}
+                                     value={values.email}
+                                     error={errors.email}
+                        />
+                      </SimpleGrid>
+                    </VStack>
 
-                  <Flex mt={8} justify={"flex-end"}>
-                    <HStack spacing={4}>
-                      <LightMode>
+                    <Flex mt={8} justify={"flex-start"}>
+                      <HStack spacing={4}>
+                        <Checkbox id="admin"
+                                  name="admin"
+                                  isDisabled={me.user.id === user.id}
+                                  onChange={handleChange}
+                                  isChecked={values.admin}
+                        >
+                          Admin
+                        </Checkbox>
+                        <Checkbox id="active"
+                                  name="active"
+                                  isDisabled={me.user.id === user.id}
+                                  onChange={handleChange}
+                                  isChecked={values.active}
+                        >
+                          Ativo
+                        </Checkbox>
+                      </HStack>
+                    </Flex>
+
+                    <Flex justify={"flex-end"}>
+                      <HStack spacing={1}>
                         <NextLink href={"/users"} passHref>
-                          <Button colorScheme={"red"}>Cancelar</Button>
+                          <Button
+                            variant={"outline"}
+                            bg={"white"}
+                            fontSize={"13px"}
+                            fontWeight={"medium"}
+                            colorScheme={"red"}
+                            size={"sm"}
+                          >Cancelar
+                          </Button>
                         </NextLink>
-                      </LightMode>
-
-                      <LightMode>
-                        <Button type={"submit"} isLoading={isSubmitting} colorScheme={"facebook"}>Salvar</Button>
-                      </LightMode>
-                    </HStack>
-                  </Flex>
-                </form>
-              </>
-            }
-          </Formik>
-        </Box>
-      </Flex>
-    </Box>
+                        <Button size={"sm"} color={"white"} bg={"black"} fontWeight={"medium"} type={"submit"}
+                                isLoading={isSubmitting}>Salvar</Button>
+                      </HStack>
+                    </Flex>
+                  </form>
+                </>
+              }
+            </Formik>
+          </Box>
+        </Flex>
+      </Box>
+    </SidebarWithHeader>
   );
 }

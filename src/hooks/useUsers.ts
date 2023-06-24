@@ -4,17 +4,75 @@ import { api } from "../services/api";
 type User = {
   id: number;
   name: string;
-  cpf: string;
-  age: number;
+  email: string;
+  admin: boolean;
+  active: boolean;
+  createdAt: string;
+  lastAccess: string;
 }
 
-export async function getUsers(): Promise<User[]> {
-  const response = await api.get('/api/people')
-  return response.data;
+type getUsersResponse = {
+  totalElements: number;
+  content: User[];
 }
 
-export function useUsers() {
-  return useQuery(['user'], () => getUsers(), {
+async function getUsers(page, sort?, status?, keyword?): Promise<getUsersResponse> {
+  const size = 8;
+  const response = await api.get('v1/user', {
+    params: {
+      page: page,
+      size: size,
+      sort: sort,
+      status: status,
+      keyword: keyword
+    }
+  });
+
+  const totalElements = response.data.totalElements;
+
+  const content = response.data.content.map(user => {
+    const createdAt = user.createdAt && isValidDate(user.createdAt)
+      ? new Date(user.createdAt).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      })
+      : "-";
+
+    const lastAccess = user.lastAccess && isValidDate(user.lastAccess)
+      ? new Date(user.lastAccess).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      })
+      : "-";
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      admin: user.admin,
+      active: user.active,
+      createdAt,
+      lastAccess
+    };
+  });
+
+  return {
+    content,
+    totalElements
+  };
+}
+
+function isValidDate(dateStr: string): boolean {
+  const date = new Date(dateStr);
+  return date instanceof Date && !isNaN(date.getTime());
+}
+
+export function useUsers(page, sort?, status?, keyword?) {
+  return useQuery(['users', page, sort, status, keyword], () => getUsers(page, sort, status, keyword), {
     staleTime: 1000 * 5,
   })
 }

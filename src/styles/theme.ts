@@ -38,8 +38,8 @@ export const theme = extendTheme(config, {
     }
   },
   fonts: {
-    heading: 'Roboto',
-    body: 'Roboto'
+    heading: 'Poppins',
+    body: 'Poppins'
   },
   styles: {
     global: {
