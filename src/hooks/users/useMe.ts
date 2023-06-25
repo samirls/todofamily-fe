@@ -8,6 +8,16 @@ type User = {
   email: string;
   admin: boolean;
   active: boolean;
+  invites: Invite[] | null;
+}
+
+export type Invite = {
+  id: number;
+  email: string;
+  idFamily: number;
+  inviteCode: string;
+  invitedName: string;
+  invitedFamilyName: string;
 }
 
 type MeResponse = {

@@ -44,6 +44,6 @@ jobs:
         if: always()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: "Backend AnyStore"
-          description: "Build and Deploy to Server"
+          title: "Frontend Todo Family 2.0"
+          description: "Código atualizado no servidor"
           username: GitHub Actions

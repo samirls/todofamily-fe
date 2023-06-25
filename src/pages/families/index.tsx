@@ -6,9 +6,9 @@ import { FamilyModal } from "../../components/Modals/FamilyModal";
 import { useFamily } from "../../hooks/family/useFamily";
 import { CardFamily } from "../../components/CardFamily";
 
-export default function Familys() {
+export default function Families() {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
-  const { data: familys, isLoading, isFetching } = useFamily();
+  const {data: families, isLoading} = useFamily();
 
   return (
     <SidebarWithHeader containerSize={"full"}>
@@ -18,7 +18,7 @@ export default function Familys() {
             <Text fontSize={"22px"} fontWeight={"medium"}>Famílias</Text>
             {isLoading ? (
               <Spinner size={"sm"} />
-            ) : () => null}
+            ) : null}
           </>
         </HStack>
         <HStack>
@@ -43,8 +43,12 @@ export default function Familys() {
       <Flex w={"full"}>
         <SimpleGrid columns={{sm: 1, md: 2, xl: 3}} spacing='20px' w={"full"}>
           {
-            familys?.map((family) => (
-              <CardFamily familyName={family.name} />
+            families?.map((family) => (
+              <CardFamily
+                key={family.id}
+                id={family.id}
+                familyName={family.name}
+              />
             ))
           }
         </SimpleGrid>

@@ -22,7 +22,7 @@ export function useLogin() {
   return useMutation(
     async ({email, password}: LoginFormData) => {
       await api.post(`/v1/auth/login`, {email, password});
-      await router.push("/familys");
+      await router.push("/families");
       await queryClient.invalidateQueries(['me'])
     },
     {

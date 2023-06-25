@@ -22,13 +22,13 @@ import {
 } from "@chakra-ui/react";
 import { FiChevronDown, FiMenu } from "react-icons/fi";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { MdHome } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import { RiTodoLine } from "react-icons/ri";
 import React, { ReactNode } from "react";
 import NextLink from "next/link";
 import { IconType } from "react-icons";
 import { useMe } from "../../hooks/users/useMe";
+import InviteAlert from "../Icons/InviteAlert";
 
 export default function SidebarWithHeader({
   children,
@@ -72,40 +72,43 @@ export default function SidebarWithHeader({
             icon={<FiMenu />}
             size="sm"
           />
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{boxShadow: 'none'}}>
-              <HStack>
-                <Avatar
-                  size={{base: 'sm', md: 'sm', lg: 'sm'}}
-                  borderColor={"gray.400"}
-                  showBorder={true}
-                />
-                <VStack
-                  display={{base: 'flex', md: 'flex'}}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2">
-                  <Text fontSize="sm">{me?.user?.name}</Text>
-                </VStack>
-                <Box display={{base: 'none', md: 'flex'}}>
-                  <FiChevronDown />
-                </Box>
-              </HStack>
-            </MenuButton>
-            <MenuList
-              bg={useColorModeValue('white', 'gray.900')}
-              borderColor={useColorModeValue('gray.200', 'gray.700')}
-            >
-              <NextLink href={"/logout"}>
-                <MenuItem>
-                  Desconectar
-                </MenuItem>
-              </NextLink>
-            </MenuList>
-          </Menu>
+          <HStack>
+            <InviteAlert value={me?.user?.invites.length} invites={me?.user?.invites} userId={me?.user?.id} />
+            <Menu>
+              <MenuButton
+                py={2}
+                transition="all 0.3s"
+                _focus={{boxShadow: 'none'}}>
+                <HStack>
+                  <Avatar
+                    size={{base: 'sm', md: 'sm', lg: 'sm'}}
+                    borderColor={"gray.400"}
+                    showBorder={true}
+                  />
+                  <VStack
+                    display={{base: 'flex', md: 'flex'}}
+                    alignItems="flex-start"
+                    spacing="1px"
+                    ml="2">
+                    <Text fontSize="sm">{me?.user?.name}</Text>
+                  </VStack>
+                  <Box display={{base: 'none', md: 'flex'}}>
+                    <FiChevronDown />
+                  </Box>
+                </HStack>
+              </MenuButton>
+              <MenuList
+                bg={useColorModeValue('white', 'gray.900')}
+                borderColor={useColorModeValue('gray.200', 'gray.700')}
+              >
+                <NextLink href={"/logout"}>
+                  <MenuItem>
+                    Desconectar
+                  </MenuItem>
+                </NextLink>
+              </MenuList>
+            </Menu>
+          </HStack>
         </Flex>
         <Container
           pt={isMobile ? '5px' : '5px'}
@@ -113,7 +116,6 @@ export default function SidebarWithHeader({
           pl={isMobile ? '5px' : '15px'}
           pr={isMobile ? '5px' : '15px'}
           maxW={containerSize}
-
         >
           {children}
         </Container>
@@ -225,7 +227,7 @@ const SidebarContent = (props) => {
         aria-label="Main Navigation"
         p={2}
       >
-        <NavItem icon={IoIosPeople} href={"/familys"}>Famílias</NavItem>
+        <NavItem icon={IoIosPeople} href={"/families"}>Famílias</NavItem>
         <NavItem icon={RiTodoLine} href={"/todos"}>Tarefas</NavItem>
         <NavItem icon={BsFillPeopleFill} href={"/users"}>Usuários</NavItem>
       </Flex>

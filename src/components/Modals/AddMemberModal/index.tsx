@@ -21,9 +21,10 @@ import { useRouter } from "next/router";
 import { Formik } from 'formik';
 import { InputFormik } from "../../Form/input";
 import { useCreateFamily } from "../../../hooks/family/useCreateFamily";
+import { useInviteMember } from "../../../hooks/invite/useInviteMember";
 
-const familyValidationSchema = yup.object().shape({
-  name: yup.string().required('Nome da família obrigatório'),
+const memberValidationSchema = yup.object().shape({
+  email: yup.string().required('Nome da família obrigatório'),
 })
 
 interface ModalTypes {
@@ -31,26 +32,25 @@ interface ModalTypes {
   onCancel?: () => void;
   trigger: (onOpen?: () => void, onClose?: () => void) => ReactNode;
   text?: string;
+  familyId: number;
 }
 
 const initialValues = {
-  name: ''
+  email: ''
 }
 
-export function FamilyModal({onOk, onCancel, trigger}: ModalTypes) {
+export function AddMemberModal({onOk, onCancel, trigger, familyId}: ModalTypes) {
   const {isOpen, onOpen, onClose} = useDisclosure();
   const router = useRouter();
-  const createFamily = useCreateFamily(() => router.push('/families'))
+  const inviteMember = useInviteMember(() => router.push('/families'))
 
   const handleOk = useCallback(() => {
     onClose();
   }, [onClose])
 
-  const handleCreateFamily = async (values) => {
+  const handleInviteMember = async (values) => {
     handleOk()
-    await createFamily.mutate({
-      ...values
-    })
+    await inviteMember.mutate({familyId, ...values})
   }
 
   const handleCancel = useCallback(() => {
@@ -70,14 +70,14 @@ export function FamilyModal({onOk, onCancel, trigger}: ModalTypes) {
         <ModalOverlay backdropFilter='blur(1px)' />
         <ModalContent bg={"white"}>
           <Formik initialValues={initialValues}
-                  validationSchema={familyValidationSchema}
-                  onSubmit={handleCreateFamily}
+                  validationSchema={memberValidationSchema}
+                  onSubmit={handleInviteMember}
           >
             {({handleSubmit, handleChange, values, errors, isSubmitting}) =>
               <>
                 <form onSubmit={handleSubmit}>
                   <Stack>
-                    <ModalHeader fontWeight={"medium"}>Adicionar Família</ModalHeader>
+                    <ModalHeader fontWeight={"medium"}>Adicionar Membro</ModalHeader>
                     <ModalCloseButton />
                   </Stack>
                   <ModalBody justifyContent={"center"}>
@@ -85,13 +85,13 @@ export function FamilyModal({onOk, onCancel, trigger}: ModalTypes) {
                       <VStack spacing={8}>
                         <SimpleGrid minChildWidth={"150px"} spacing={5} w={"100%"}>
                           <SimpleGrid minChildWidth={"240px"} spacing={5} w={"100%"}>
-                            <InputFormik label={"Nome da Família"}
-                                         name={"name"}
+                            <InputFormik label={"Email do membro"}
+                                         name={"email"}
                                          important={"*"}
                                          type={"text"}
                                          onChange={handleChange}
-                                         value={values.name}
-                                         error={errors.name}
+                                         value={values.email}
+                                         error={errors.email}
                             />
                           </SimpleGrid>
                         </SimpleGrid>

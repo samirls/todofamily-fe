@@ -2,13 +2,16 @@ import { Avatar, Flex, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList,
 import React from "react";
 import { RiMore2Fill } from "react-icons/ri";
 import { ExternalLinkIcon, RepeatIcon } from "@chakra-ui/icons";
+import { MdEmojiPeople } from "react-icons/md";
+import { AddMemberModal } from "../Modals/AddMemberModal";
 
 
 type CardFamilyProps = {
   familyName: string;
+  id: number;
 }
 
-export function CardFamily({familyName}: CardFamilyProps) {
+export function CardFamily({familyName, id}: CardFamilyProps) {
   return (
     <Flex w={"full"} h={"100px"} bg={"white"} borderRadius={"lg"}>
       <Flex p={"15px"} justify={"space-between"} alignItems={"center"} w={"full"}>
@@ -32,6 +35,14 @@ export function CardFamily({familyName}: CardFamilyProps) {
             <MenuItem icon={<RepeatIcon />}>
               Editar Família
             </MenuItem>
+            <AddMemberModal
+              familyId={id}
+              trigger={(onOpen =>
+                <MenuItem icon={<MdEmojiPeople />} onClick={onOpen}>
+                  Adicionar membro
+                </MenuItem>
+            )} />
+
           </MenuList>
         </Menu>
       </Flex>

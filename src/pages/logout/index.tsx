@@ -7,7 +7,7 @@ export const Logout = () => {
 
   useQuery(['logout'], async () => {
     await api.post('v1/auth/logout')
-    router.push("/");
+    await router.push("/");
   })
 
   return null
