@@ -3,8 +3,12 @@ import {
   Box,
   Container,
   Drawer,
-  DrawerContent,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
   DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
   Flex,
   HStack,
   Icon,
@@ -22,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { FiChevronDown, FiMenu } from "react-icons/fi";
 import { BsFillPeopleFill } from "react-icons/bs";
+import { RiCloseCircleLine } from "react-icons/ri"
 import { IoIosPeople } from "react-icons/io";
 import { RiTodoLine } from "react-icons/ri";
 import React, { ReactNode } from "react";
@@ -36,7 +41,7 @@ export default function SidebarWithHeader({
 }: { children?: ReactNode; containerSize?: string }) {
   const isMobile = useBreakpointValue({base: true, md: false});
   const sidebar = useDisclosure();
-  const {data: me} = useMe()
+  const {data: me} = useMe();
 
   return (
     <Box as="section" bg="gray.50" _dark={{bg: "gray.700",}} minH="100vh">
@@ -182,6 +187,8 @@ const NavItem = ({icon, children, href, ...rest}: NavItemProps) => {
 const SidebarContent = (props) => {
   const integrations = useDisclosure();
   const products = useDisclosure();
+  const isMobile = useBreakpointValue({base: true, md: false});
+  const sidebar = useDisclosure();
   return (
     <Box
       as="nav"
@@ -203,6 +210,10 @@ const SidebarContent = (props) => {
       w="60"
       {...props}
     >
+      <Flex justify="end" m="2" display={isMobile ? "flex" : "none"}>
+        <RiCloseCircleLine size={22} onClick={sidebar.onClose}/>
+        
+      </Flex>
       <Flex justify={"center"} py="5">
         {/*<Logo />*/}
         <NextLink href="/" passHref>
