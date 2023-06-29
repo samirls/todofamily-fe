@@ -216,7 +216,7 @@ const SidebarContent = (props) => {
       </Flex>
       <Flex justify={"center"} py="5">
         {/*<Logo />*/}
-        <NextLink href="/" passHref>
+        <NextLink href="/families" passHref>
           <Link sx={{'&:hover': {textDecoration: 'none'}}}>
             <Text
               textAlign={useBreakpointValue({base: 'left', md: 'left'})}
