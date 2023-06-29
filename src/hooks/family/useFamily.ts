@@ -4,6 +4,13 @@ import { api } from "../../services/api";
 type Family = {
   id: number;
   name: string;
+  todos: Todos[] | null;
+}
+
+type Todos = {
+  id: number;
+  todoName: string;
+  concluded: boolean;
 }
 
 async function getFamily(): Promise<Family[]> {

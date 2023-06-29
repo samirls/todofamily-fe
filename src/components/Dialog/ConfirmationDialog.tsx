@@ -23,7 +23,16 @@ interface ModalProps {
   buttonText: string;
 }
 
-export function ConfirmationDialog({onOk, onCancel, trigger, mainColor, title, disabled, description, buttonText }: ModalProps) {
+export function ConfirmationDialog({
+  onOk,
+  onCancel,
+  trigger,
+  mainColor,
+  title,
+  disabled,
+  description,
+  buttonText
+}: ModalProps) {
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const handleCancel = useCallback(() => {
@@ -36,24 +45,25 @@ export function ConfirmationDialog({onOk, onCancel, trigger, mainColor, title, d
     onClose();
   }, [onClose, onOk])
 
-  return(
+  return (
     <>
-      {trigger(disabled ? () => {} : onOpen, onClose)}
+      {trigger(disabled ? () => {
+      } : onOpen, onClose)}
       <Modal onClose={handleCancel} isOpen={isOpen} isCentered>
         <ModalOverlay
           bg='blackAlpha.300'
           backdropFilter='blur(10px)'
         />
         <ModalContent bg={mainColor}>
-          <ModalHeader bg={"red"}>{title}</ModalHeader>
+          <ModalHeader fontWeight={"medium"}>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody justifyContent={"center"}>
             <h1>{description}</h1>
           </ModalBody>
           <ModalFooter>
-            <HStack spacing={2}>
-              <Button colorScheme={"blue"} onClick={handleCancel}>Cancelar</Button>
-              <Button colorScheme={"red"} onClick={handleOk}>{buttonText}</Button>
+            <HStack spacing={1}>
+              <Button fontWeight={"medium"} size={"sm"} onClick={handleCancel}>Cancelar</Button>
+              <Button fontWeight={"medium"} size={"sm"} colorScheme={"red"} onClick={handleOk}>{buttonText}</Button>
             </HStack>
           </ModalFooter>
         </ModalContent>
